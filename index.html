@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,62 +8,46 @@
   <body>
     <header>
         <div class="header">
-            <h1>10 Dimensões
-            </h1>
+            <h1>10 Dimensões</h1>
         </div>
     </header>
     <div class="h1">
         <h3>Giroscópio</h3>
-    <div class="cube-content">
-      <div id="3Dcube"></div>
-    </div>
+        <div class="cube-content">
+            <div id="3Dcube"></div>
+        </div>
     </div>
   
-      <h3>Valores do giroscópio.</h3>
-<p><span class="leitura">X: <span id="gyroX">0</span></span></p>
-<p><span class="leitura">Y: <span id="gyroY">0</span></span></p>
-<p><span class="leitura">Z: <span id="gyroZ">0</span></span></p>
-<input type="button" onclick="startGyroscopeTracking()" value="Iniciar Giroscópio">
-  <div>
-    <div id="orientation-data"></div>
+    <h3>Valores do giroscópio.</h3>
+    <p><span class="leitura">X: <span id="gyroX">0</span></span></p>
+    <p><span class="leitura">Y: <span id="gyroY">0</span></span></p>
+    <p><span class="leitura">Z: <span id="gyroZ">0</span></span></p>
+    <input type="button" onclick="startGyroscopeTracking()" value="Iniciar Giroscópio">
+    <div>
+        <div id="orientation-data"></div>
+    </div>
 
-  <script>
-    (function(a,b){"function"===typeof define&&define.amd?define(b):"object"===typeof exports?module.exports=b():a.gyro=b()})(this,function(){var a={x:null,y:null,z:null,alpha:null,beta:null,gamma:null},b={x:0,y:0,z:0,alpha:0,beta:0,gamma:0},g=null,e=[],h={frequency:500,calibrate:function(){for(var f in a)b[f]="number"===typeof a[f]?a[f]:0},getOrientation:function(){return a},startTracking:function(b){g=setInterval(function(){b(a)},h.frequency)},stopTracking:function(){clearInterval(g)},hasFeature:function(a){for(var b in e)if(a==
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
+    <script>
+        (function(a,b){"function"===typeof define&&define.amd?define(b):"object"===typeof exports?module.exports=b():a.gyro=b()})(this,function(){var a={x:null,y:null,z:null,alpha:null,beta:null,gamma:null},b={x:0,y:0,z:0,alpha:0,beta:0,gamma:0},g=null,e=[],h={frequency:500,calibrate:function(){for(var f in a)b[f]="number"===typeof a[f]?a[f]:0},getOrientation:function(){return a},startTracking:function(b){g=setInterval(function(){b(a)},h.frequency)},stopTracking:function(){clearInterval(g)},hasFeature:function(a){for(var b in e)if(a==
 	e[b])return!0;return!1},getFeatures:function(){return e}};window&&window.addEventListener&&function(){function f(d){e.push("MozOrientation");d.target.removeEventListener("MozOrientation",f,!0);d.target.addEventListener("MozOrientation",function(c){a.x=c.x-b.x;a.y=c.y-b.y;a.z=c.z-b.z},!0)}function g(d){e.push("devicemotion");d.target.removeEventListener("devicemotion",g,!0);d.target.addEventListener("devicemotion",function(c){a.x=c.accelerationIncludingGravity.x-b.x;a.y=c.accelerationIncludingGravity.y-
 	b.y;a.z=c.accelerationIncludingGravity.z-b.z},!0)}function h(d){e.push("deviceorientation");d.target.removeEventListener("deviceorientation",h,!0);d.target.addEventListener("deviceorientation",function(c){a.alpha=c.alpha-b.alpha;a.beta=c.beta-b.beta;a.gamma=c.gamma-b.gamma},!0)}window.addEventListener("MozOrientation",f,!0);window.addEventListener("devicemotion",g,!0);window.addEventListener("deviceorientation",h,!0)}();return h});
 
-      var orientationData = document.getElementById('orientation-data');
-// Função para iniciar o rastreamento do giroscópio
-function startGyroscopeTracking() {
-    gyro.startTracking(function(data) {
-        // Atualize os elementos HTML com os valores do giroscópio
+
+
+        var orientationData = document.getElementById('orientation-data');
         var gyroXElement = document.getElementById('gyroX');
         var gyroYElement = document.getElementById('gyroY');
         var gyroZElement = document.getElementById('gyroZ');
-        
-        gyroXElement.textContent = data.alpha || 0;
-        gyroYElement.textContent = data.beta || 0;
-        gyroZElement.textContent = data.gamma || 0;
-    });
-}
 
-function onClick() {
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          DeviceMotionEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === 'granted') {
-                window.addEventListener('devicemotion', cb);
-              }
-            })
-            .catch(console.error);
-        } else {
-          window.addEventListener('devicemotion', cb);
-        }
-      }
+        gyro.startTracking(function(data) {
+            gyroXElement.textContent = data.alpha || 0;
+            gyroYElement.textContent = data.beta || 0;
+            gyroZElement.textContent = data.gamma || 0;
+        });
 
-
-  function init3D() {
-    scene = new THREE.Scene();
+        function init3D() {
+            scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
     camera = new THREE.PerspectiveCamera(
@@ -109,19 +94,22 @@ function onClick() {
 
   // Create the 3D representation
   init3D();
+        
 
-  // Função para atualizar a rotação do cubo com base nos valores do giroscópio
-  function updateCubeRotation() {
-    if (det && dtheta1dt == dtheta1dt) {
-      cube.rotation.x = data.alpha;
-      cube.rotation.y = data.beta;
-      cube.rotation.z = data.gamma;
-      renderer.render(scene, camera);
-    }
-    requestAnimationFrame(updateCubeRotation);
-  }
+        function updateCubeRotation(data) {
+            cube.rotation.x = data.alpha || 0;
+            cube.rotation.y = data.beta || 0;
+            cube.rotation.z = data.gamma || 0;
+            renderer.render(scene, camera);
+            requestAnimationFrame(updateCubeRotation);
+        }
 
-  updateCubeRotation();
-</script>
-</body>
+        // Iniciar o rastreamento do giroscópio
+        function startGyroscopeTracking() {
+            updateCubeRotation({ alpha: 0, beta: 0, gamma: 0 }); // Inicie com valores padrão
+        }
+ 
+
+    </script>
+  </body>
 </html>
