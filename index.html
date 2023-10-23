@@ -42,9 +42,9 @@
 
 
 
-      gyroData.x =gyroData.beta;
-      gyroData.y =gyroData.gamma;
-      gyroData.z =gyroData.alpha;
+      gyroData.x =gyroData.beta/100;
+      gyroData.y =gyroData.gamma/100;
+      gyroData.z =gyroData.alpha/100;
 
 
       document.getElementById('gyroX').textContent = gyroData.x.toFixed(3);
