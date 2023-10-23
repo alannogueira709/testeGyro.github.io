@@ -40,9 +40,18 @@
       gyroData.beta = event.beta;
       gyroData.gamma = event.gamma;
 
-      document.getElementById('gyroX').textContent = gyroData.alpha.toFixed(3);
-      document.getElementById('gyroY').textContent = gyroData.beta.toFixed(3);
-      document.getElementById('gyroZ').textContent = gyroData.gamma.toFixed(3);
+
+
+      gyroData.x = map(gyroData.beta, -180, 180, -1, 1);
+      gyroData.y = map(gyroData.gamma, -90, 90, -1, 1);
+      gyroData.z = map(gyroData.alpha, 0, 360, -1, 1);
+
+
+      document.getElementById('gyroX').textContent = gyroData.x.toFixed(3);
+      document.getElementById('gyroY').textContent = gyroData.y.toFixed(3);
+      document.getElementById('gyroZ').textContent = gyroData.z.toFixed(3);
+
+      
     }
 
     function setup() {
