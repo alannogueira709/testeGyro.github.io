@@ -53,15 +53,21 @@
       gyroData.gamma = event.gamma;
 
       // Atualize a posição do círculo com base nos dados do giroscópio
-      circleX += gyroData.gamma * 5; // Ajuste o fator de escala conforme necessário
-      circleY += gyroData.beta * 5;  // Ajuste o fator de escala conforme necessário
+      circleX += gyroData.gamma*2; // Ajuste o fator de escala conforme necessário
+      circleY += gyroData.beta *2;  // Ajuste o fator de escala conforme necessário
 
       // Redefina as outras propriedades de gyroData como necessário
-      gyroData.x = 0;
-      gyroData.y = 0;
-      gyroData.z = 0;
+    gyroData.x = event.beta;
+    gyroData.y = event.gamma;
+    gyroData.z = event.alpha;
+   
+    document.getElementById('gyroX').textContent = gyroData.beta.toFixed(3);
+    document.getElementById('gyroY').textContent = gyroData.gamma.toFixed(3);
+    document.getElementById('gyroZ').textContent = gyroData.alpha.toFixed(3);
+
     }
 
+    
     function setup() {
       createCanvas(400, 400);
     }
