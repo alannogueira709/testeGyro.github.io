@@ -1,13 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 </head>
 <body>
   <h3>Giroscópio</h3>
- 
   <h3>Valores do giroscópio.</h3>
   <p><span class="leitura">X: <span id="gyroX">0</span></span></p>
   <p><span class="leitura">Y: <span id="gyroY">0</span></span></p>
@@ -15,13 +12,6 @@
   <input type="button" onclick="onClick()" value="Iniciar Giroscópio">
   
   <script>
-
-
-    // Inicialize as variáveis de controle do círculo
-    let circleX = 150;
-    let circleY = 150;
-
-    // Crie um objeto que corresponda à estrutura do script fornecido
     const gyroData = {
       x: null,
       y: null,
@@ -42,42 +32,50 @@
           .catch(console.error);
       } else {
         window.addEventListener('deviceorientation', cb);
-        // Lidar com dispositivos iOS mais antigos ou outros dispositivos
       }
     }
 
     function cb(event) {
-      // Atualize o objeto gyroData com os valores do evento
       gyroData.alpha = event.alpha;
       gyroData.beta = event.beta;
       gyroData.gamma = event.gamma;
 
-      // Atualize a posição do círculo com base nos dados do giroscópio
-      circleX += gyroData.gamma*2; // Ajuste o fator de escala conforme necessário
-      circleY += gyroData.beta *2;  // Ajuste o fator de escala conforme necessário
-
-      // Redefina as outras propriedades de gyroData como necessário
-    gyroData.x = event.beta;
-    gyroData.y = event.gamma;
-    gyroData.z = event.alpha;
-   
-    document.getElementById('gyroX').textContent = gyroData.beta.toFixed(3);
-    document.getElementById('gyroY').textContent = gyroData.gamma.toFixed(3);
-    document.getElementById('gyroZ').textContent = gyroData.alpha.toFixed(3);
-
+      document.getElementById('gyroX').textContent = gyroData.alpha.toFixed(3);
+      document.getElementById('gyroY').textContent = gyroData.beta.toFixed(3);
+      document.getElementById('gyroZ').textContent = gyroData.gamma.toFixed(3);
     }
 
-    
     function setup() {
-      createCanvas(400, 400);
+      createCanvas(windowWidth, windowHeight);
     }
 
     function draw() {
       background(255);
+      strokeWeight(3);
+      rect(100, 100, 200, 200, 20);
 
-      // Desenhe o círculo na posição atual
-      fill('red');
-      circle(circleX, circleY, 50);
+      const medidaX = (width / 2) + (gyroData.x * 100);
+      const medidaY = (height / 2) + (gyroData.y * 150);
+
+      let xr = constrain(medidaX, 100, 300);
+      let yr = constrain(medidaY, 100, 300);
+
+      push();
+      fill("black");
+      circle(xr, yr, 75);
+      textSize(25);
+      if (gyroData.y < -0.2) {
+        text("FRENTE", 150, 350);
+      } else if (gyroData.y > 0.5) {
+        text("TRÁS", 150, 350);
+      }
+
+      if (gyroData.x < -0.7) {
+        text("ESQUERDA", 150, 375);
+      } else if (gyroData.x > 0.7) {
+        text("DIREITA", 150, 375);
+      }
+      pop();
     }
   </script>
 </body>
