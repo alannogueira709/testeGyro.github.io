@@ -1,115 +1,78 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
-    <!-- Seus outros elementos de cabeçalho -->
-  </head>
-  <body>
-    <header>
-        <div class="header">
-            <h1>10 Dimensões</h1>
-        </div>
-    </header>
-    <div class="h1">
-        <h3>Giroscópio</h3>
-        <div class="cube-content">
-            <div id="3Dcube"></div>
-        </div>
-    </div>
-  
-    <h3>Valores do giroscópio.</h3>
-    <p><span class="leitura">X: <span id="gyroX">0</span></span></p>
-    <p><span class="leitura">Y: <span id="gyroY">0</span></span></p>
-    <p><span class="leitura">Z: <span id="gyroZ">0</span></span></p>
-    <input type="button" onclick="startGyroscopeTracking()" value="Iniciar Giroscópio">
-    <div>
-        <div id="orientation-data"></div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
-    <script>
-        (function(a,b){"function"===typeof define&&define.amd?define(b):"object"===typeof exports?module.exports=b():a.gyro=b()})(this,function(){var a={x:null,y:null,z:null,alpha:null,beta:null,gamma:null},b={x:0,y:0,z:0,alpha:0,beta:0,gamma:0},g=null,e=[],h={frequency:500,calibrate:function(){for(var f in a)b[f]="number"===typeof a[f]?a[f]:0},getOrientation:function(){return a},startTracking:function(b){g=setInterval(function(){b(a)},h.frequency)},stopTracking:function(){clearInterval(g)},hasFeature:function(a){for(var b in e)if(a==
-	e[b])return!0;return!1},getFeatures:function(){return e}};window&&window.addEventListener&&function(){function f(d){e.push("MozOrientation");d.target.removeEventListener("MozOrientation",f,!0);d.target.addEventListener("MozOrientation",function(c){a.x=c.x-b.x;a.y=c.y-b.y;a.z=c.z-b.z},!0)}function g(d){e.push("devicemotion");d.target.removeEventListener("devicemotion",g,!0);d.target.addEventListener("devicemotion",function(c){a.x=c.accelerationIncludingGravity.x-b.x;a.y=c.accelerationIncludingGravity.y-
-	b.y;a.z=c.accelerationIncludingGravity.z-b.z},!0)}function h(d){e.push("deviceorientation");d.target.removeEventListener("deviceorientation",h,!0);d.target.addEventListener("deviceorientation",function(c){a.alpha=c.alpha-b.alpha;a.beta=c.beta-b.beta;a.gamma=c.gamma-b.gamma},!0)}window.addEventListener("MozOrientation",f,!0);window.addEventListener("devicemotion",g,!0);window.addEventListener("deviceorientation",h,!0)}();return h});
-
-
-
-        var orientationData = document.getElementById('orientation-data');
-        var gyroXElement = document.getElementById('gyroX');
-        var gyroYElement = document.getElementById('gyroY');
-        var gyroZElement = document.getElementById('gyroZ');
-
-        gyro.startTracking(function(data) {
-            gyroXElement.textContent = data.alpha || 0;
-            gyroYElement.textContent = data.beta || 0;
-            gyroZElement.textContent = data.gamma || 0;
-        });
-
-        function init3D() {
-            scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
-
-    camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.getElementById('3Dcube').appendChild(renderer.domElement);
-
-    // Create a geometry
-    const geometry = new THREE.BoxGeometry(5, 1, 4);
-
-    // Materials of each face
-    var cubeMaterials = [
-      new THREE.MeshBasicMaterial({ color: 0x03045e }),
-      new THREE.MeshBasicMaterial({ color: 0x023e8a }),
-      new THREE.MeshBasicMaterial({ color: 0x0077b6 }),
-      new THREE.MeshBasicMaterial({ color: 0x03045e }),
-      new THREE.MeshBasicMaterial({ color: 0x023e8a }),
-      new THREE.MeshBasicMaterial({ color: 0x0077b6 }),
-    ];
-
-    const material = new THREE.MeshFaceMaterial(cubeMaterials);
-
-    cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    camera.position.z = 5;
-    renderer.render(scene, camera);
-  }
-
-  // Resize the 3D object when the browser window changes size
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  window.addEventListener('resize', onWindowResize, false);
-
-  // Create the 3D representation
-  init3D();
-        
-
-        function updateCubeRotation(data) {
-            cube.rotation.x = data.alpha || 0;
-            cube.rotation.y = data.beta || 0;
-            cube.rotation.z = data.gamma || 0;
-            renderer.render(scene, camera);
-            requestAnimationFrame(updateCubeRotation);
-        }
-
-        // Iniciar o rastreamento do giroscópio
-        function startGyroscopeTracking() {
-            updateCubeRotation({ alpha: 0, beta: 0, gamma: 0 }); // Inicie com valores padrão
-        }
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+</head>
+<body>
+  <h3>Giroscópio</h3>
  
+  <h3>Valores do giroscópio.</h3>
+  <p><span class="leitura">X: <span id="gyroX">0</span></span></p>
+  <p><span class="leitura">Y: <span id="gyroY">0</span></span></p>
+  <p><span class="leitura">Z: <span id="gyroZ">0</span></span></p>
+  <input type="button" onclick="onClick()" value="Iniciar Giroscópio">
+  
+  <script>
 
-    </script>
-  </body>
+
+    // Inicialize as variáveis de controle do círculo
+    let circleX = 150;
+    let circleY = 150;
+
+    // Crie um objeto que corresponda à estrutura do script fornecido
+    const gyroData = {
+      x: null,
+      y: null,
+      z: null,
+      alpha: null,
+      beta: null,
+      gamma: null
+    };
+
+    function onClick() {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', cb);
+            }
+          })
+          .catch(console.error);
+      } else {
+        window.addEventListener('deviceorientation', cb);
+        // Lidar com dispositivos iOS mais antigos ou outros dispositivos
+      }
+    }
+
+    function cb(event) {
+      // Atualize o objeto gyroData com os valores do evento
+      gyroData.alpha = event.alpha;
+      gyroData.beta = event.beta;
+      gyroData.gamma = event.gamma;
+
+      // Atualize a posição do círculo com base nos dados do giroscópio
+      circleX += gyroData.gamma * 5; // Ajuste o fator de escala conforme necessário
+      circleY += gyroData.beta * 5;  // Ajuste o fator de escala conforme necessário
+
+      // Redefina as outras propriedades de gyroData como necessário
+      gyroData.x = 0;
+      gyroData.y = 0;
+      gyroData.z = 0;
+    }
+
+    function setup() {
+      createCanvas(400, 400);
+    }
+
+    function draw() {
+      background(255);
+
+      // Desenhe o círculo na posição atual
+      fill('red');
+      circle(circleX, circleY, 50);
+    }
+  </script>
+</body>
 </html>
